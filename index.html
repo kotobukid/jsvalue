@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>wasmテスト</title>
+    <script type="module">
+        import init, {greet} from "./vite-project/src/dist/jsv_bg";
+        init().then(() => {
+            greet()
+        })
+    </script>
+    <script type="module" src="/main.js"></script>
+</head>
+</html>
