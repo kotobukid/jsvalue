@@ -14,6 +14,7 @@ init().then(() => {
 
     const {people} = get_people();
     console.log(people)
+    window.get_people = get_people;
 
     createApp(App).mount('#app')
 });
