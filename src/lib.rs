@@ -1,6 +1,7 @@
 mod utils;
 
 use wasm_bindgen::prelude::*;
+use wasm_bindgen::JsValue;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -16,4 +17,9 @@ extern {
 #[wasm_bindgen]
 pub fn greet(name: &str) {
     alert(format!("Hello, {}!", name).as_str());
+}
+
+#[wasm_bindgen]
+pub fn flatten() -> JsValue {
+    return  JsValue::from_str("aaaaa")
 }
