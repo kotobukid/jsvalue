@@ -1,7 +1,15 @@
 mod utils;
-
+use serde::{Serialize, Deserialize};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsValue;
+use serde_wasm_bindgen::to_value;
+
+#[derive(Serialize, Deserialize)]
+struct Person {
+    age: u32,
+    name: String
+}
+
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -23,3 +31,10 @@ pub fn greet(name: &str) {
 pub fn flatten() -> JsValue {
     return  JsValue::from_str("aaaaa")
 }
+
+#[wasm_bindgen]
+pub fn get_person() -> JsValue {
+    let p = Person{age: 20, name: "Taro".into()};
+     to_value(&p).unwrap()
+}
+
