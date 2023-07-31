@@ -6,6 +6,7 @@ defineProps<{ msg: string }>()
 const count = ref(0)
 
 const increment = () => {
+    // @ts-ignore
     const {people} = window.get_people()
     console.log(people);
     count.value = count.value + 1;
