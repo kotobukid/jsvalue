@@ -2,7 +2,7 @@
 
 ```shell
 # compile
-wasm-pack build -d "./vite-project/src/dist --target web"
+wasm-pack build -d "./vite-project/src/pkg --target web"
 
 #serve
 cd vite-project
