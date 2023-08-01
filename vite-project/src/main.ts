@@ -6,7 +6,10 @@ import init, {
     flatten, get_person, get_people,
     // call_js_callback,
     MyStruct,
-    double_people
+    double_people,
+    Point2D,
+    search_people,
+    PeopleFinder
 } from "/src/pkg/jsv";
 
 type Person = {
@@ -23,6 +26,16 @@ declare module "/src/pkg/jsv" {
 
 init().then(() => {
     // greet("WebAssembly");
+
+    const res = search_people("ro");
+    console.log(res);
+
+    const res2 = search_people("j");
+    console.log(res2);
+
+    const point: Point2D = Point2D.new(100, 200);
+    console.log(point.get_x());
+    console.log(point.get_y());
 
     const callback1 = (people: People): void => {
         console.log(double_people(people));
@@ -50,6 +63,15 @@ init().then(() => {
 
     // @ts-ignore
     window.get_people = get_people;
+
+    const pf = PeopleFinder.new();
+    pf.set_age_gte(23);
+    const result = pf.apply();
+    console.log(result);
+    pf.clear_age_gte();
+    pf.set_age_lte(21);
+    const result2 = pf.apply();
+    console.log(result2)
 
 
     createApp(App).mount('#app')
