@@ -17,6 +17,10 @@ type People = {
     people: Person[]
 };
 
+declare module "/src/pkg/jsv" {
+  export function double_people(js_people: People): People;
+}
+
 init().then(() => {
     // greet("WebAssembly");
 
