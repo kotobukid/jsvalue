@@ -65,13 +65,10 @@ init().then(() => {
     window.get_people = get_people;
 
     const pf = PeopleFinder.new();
-    pf.set_age_gte(23);
-    const result = pf.apply();
-    console.log(result);
-    pf.clear_age_gte();
-    pf.set_age_lte(21);
-    const result2 = pf.apply();
-    console.log(result2)
+    pf.set_name_part("o")
+    console.log(pf.apply());
+    pf.set_age_gte(22);
+    console.log(pf.apply());
 
 
     createApp(App).mount('#app')

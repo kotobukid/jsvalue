@@ -8,7 +8,7 @@ use serde_wasm_bindgen::{to_value, from_value};
 use js_sys;
 
 #[derive(Serialize, Deserialize, Clone)]
-struct Person {
+pub struct Person {
     age: u32,
     name: String,
 }
@@ -213,6 +213,8 @@ pub struct PeopleFinder {
     age_gte: Option<u32>,
 }
 
+include!(concat!(env!("OUT_DIR"), "/data.rs"));
+
 #[wasm_bindgen]
 impl PeopleFinder {
     pub fn new() -> PeopleFinder {
@@ -248,19 +250,20 @@ impl PeopleFinder {
     }
 
     pub fn apply(&self) -> JsValue {
-        let people = vec![ // ここに人々のデータを記述
-                           Person::new(String::from("taro"), 20),
-                           Person { name: "jiro".to_string(), age: 21 },
-                           Person { name: "saburo".to_string(), age: 22 },
-                           Person { name: "hanako".to_string(), age: 23 },
-                           Person { name: "jane".to_string(), age: 24 },
-                           Person { name: "tom".to_string(), age: 25 },
-                           Person { name: "jack".to_string(), age: 26 },
-                           Person { name: "milro".to_string(), age: 27 },
-        ];
+        // let people = vec![ // ここに人々のデータを記述
+        //                    Person::new(String::from("taro"), 20),
+        //                    Person { name: "jiro".to_string(), age: 21 },
+        //                    Person { name: "saburo".to_string(), age: 22 },
+        //                    Person { name: "hanako".to_string(), age: 23 },
+        //                    Person { name: "jane".to_string(), age: 24 },
+        //                    Person { name: "tom".to_string(), age: 25 },
+        //                    Person { name: "jack".to_string(), age: 26 },
+        //                    Person { name: "milro".to_string(), age: 27 },
+        // ];
+        let people = PEOPLE_ALL.iter();
 
         let result: Vec<&Person> = people
-            .iter()
+            // .iter()
             .filter(|p| {
                 self.part_name.as_ref().map_or(true, |name_part| p.name.contains(name_part))
                     && self.age_lte.map_or(true, |age| p.age <= age)
