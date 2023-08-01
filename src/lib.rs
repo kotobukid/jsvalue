@@ -6,6 +6,7 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen::{JsValue};
 use serde_wasm_bindgen::{to_value, from_value};
 use js_sys;
+use lazy_static::lazy_static;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Person {
@@ -106,33 +107,6 @@ pub fn get_people() -> JsValue {
     to_value(&people).unwrap()
 }
 
-// #[wasm_bindgen]
-// pub fn print_people(js_people: JsValue) -> JsValue {
-//     if let Ok(people) = from_value::<People>(js_people) {
-//         to_value(&people).unwrap()
-//     } else {
-//         println!("Failed to deserialize People");
-//         None
-//     }
-// }
-//
-// #[wasm_bindgen]
-// extern "C" {
-//     type JsFunction;
-//
-//     #[wasm_bindgen(method, js_name = call)]
-//     fn call(this: &JsFunction, people: JsValue);
-// }
-//
-//
-// use wasm_bindgen::JsCast;
-//
-// #[wasm_bindgen]
-// pub fn call_js_callback(callback: js_sys::Function, people: JsValue) {
-//     let this = JsValue::null();
-//     let _ = callback.call1(&this, &people);
-// }
-
 #[wasm_bindgen]
 pub struct Point2D {
     x: f32,
@@ -153,52 +127,6 @@ impl Point2D {
         self.y
     }
 }
-
-use lazy_static::lazy_static;
-lazy_static! {
-    // 10000個のPersonを保持する静的配列
-    static ref PEOPLE: [Person; 8] = [
-        Person {name: String::from("taro"), age: 20},
-        Person {name: "jiro".to_string(), age: 21},
-        Person {name: "saburo".to_string(), age: 22},
-        Person {name: "hanako".to_string(), age: 23},
-        Person {name: "jane".to_string(), age: 24},
-        Person {name: "tom".to_string(), age: 25},
-        Person {name: "jack".to_string(), age: 26},
-        Person {name: "milro".to_string(), age: 27},
-];
-}
-
-// キャッシュの定義
-static mut CACHE: Option<(String, Vec<Person>)> = None;
-
-#[wasm_bindgen]
-pub fn search_people(name_part: &str) -> JsValue {
-    // キャッシュのチェック
-    unsafe {
-        if let Some((ref query, ref result)) = CACHE {
-            if query == name_part {
-                // return result.clone();
-                return to_value(&result.clone()).unwrap();
-            }
-        }
-    }
-
-    // 絞り込み条件に一致する人々を集める
-    let result: Vec<Person> = PEOPLE
-        .iter()
-        .filter(|p| p.name.contains(name_part))
-        .cloned()
-        .collect();
-
-    // 結果をキャッシュに格納
-    unsafe {
-        CACHE = Some((name_part.to_string(), result.clone()));
-    }
-
-    to_value(&result).unwrap()
-}
-
 
 impl Person {
     pub fn new(name: String, age: u32) -> Person {
@@ -250,20 +178,9 @@ impl PeopleFinder {
     }
 
     pub fn apply(&self) -> JsValue {
-        // let people = vec![ // ここに人々のデータを記述
-        //                    Person::new(String::from("taro"), 20),
-        //                    Person { name: "jiro".to_string(), age: 21 },
-        //                    Person { name: "saburo".to_string(), age: 22 },
-        //                    Person { name: "hanako".to_string(), age: 23 },
-        //                    Person { name: "jane".to_string(), age: 24 },
-        //                    Person { name: "tom".to_string(), age: 25 },
-        //                    Person { name: "jack".to_string(), age: 26 },
-        //                    Person { name: "milro".to_string(), age: 27 },
-        // ];
         let people = PEOPLE_ALL.iter();
 
         let result: Vec<&Person> = people
-            // .iter()
             .filter(|p| {
                 self.part_name.as_ref().map_or(true, |name_part| p.name.contains(name_part))
                     && self.age_lte.map_or(true, |age| p.age <= age)
